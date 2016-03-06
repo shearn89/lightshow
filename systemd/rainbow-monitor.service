@@ -1,0 +1,9 @@
+[Unit]
+Description=Rainbow Monitor Service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rainbow-monitor.sh
+
+[Install]
+WantedBy=multi-user.target
