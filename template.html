@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Rainbow Monitor</title>
+        <link rel="stylesheet" type="text/css" href="monitor.css">
+    </head>
+    <body>
+        Last checked: {{ last_check }}
+        <table>
+            <tr><th>Check</th><th>Status</th></tr>
+        {% for check in content %}
+            <tr><td>{{ check.name }}</td><td>{{ check.status }}</td></tr>
+        {% endfor %}
+        </table>
+    </body>
+</html>
