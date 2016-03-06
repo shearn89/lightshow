@@ -2,6 +2,13 @@
 import socket
 import subprocess
 
+class Check:
+        def __init__(self, name, status, priority=0):
+                self.name = name
+                self.status = status
+                self.priority = priority
+        
+
 def check_host_port(host,port,timeout=1):
     try:
         socket.setdefaulttimeout(timeout)
