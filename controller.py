@@ -1,23 +1,19 @@
 # This class should control the output of checks and trigger different light modes.
 
-from flask import Flask
+import os
+import time
+import datetime
+import signal
+import sys
+import threading
+
+from twisted.web import server, resource
+from twisted.internet import reactor,endpoints
+
 from monitor import checks,status
 
-### Webserver Setup
-app = Flask(__name__)
+STATUS = "/dev/shm/monitor-status.txt"
 
-@app.route("/")
-def hello():
-    return "Hello Pi!"
-
-def print_result(text, value):
-    if value:
-        print text + " is up"
-    else:
-        print text + " is down"
-###
-
-### Checks setup
 def run_checks(status):
     dns_net = checks.Check('Name Based Internet',checks.check_dns_net())
     status.add(dns_net)
@@ -45,14 +41,45 @@ def run_checks(status):
     status.add(freya)
     freya_web = checks.Check('Freya Web Server', checks.check_host_port('192.168.1.20', 80))
     status.add(freya_web)
-###
+
+### Checks setup
+class checkThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.health_status = status.Status()
+        self.signal = True
+    
+    def run(self):
+        print "running checks..."
+        run_checks(self.health_status)
+        ## Lock this?
+        ostring = "%s\n" % datetime.datetime.now()
+        print "building string"
+        for check in self.health_status:
+            ostring += "%s: %s\n" % (check.name, 'up' if check.status else 'down')
+        print "built"
+        with open(STATUS, 'w') as output:
+            output.write(ostring)
+        print "written"
+### end checks setup
+
+class MonServer(resource.Resource):
+    isLeaf = True
+    numberRequests = 0
+
+    def render_GET(self, request):
+        self.numberRequests += 1
+        request.setHeader(b"content-type", b"text/plain")
+        content = u"I am request #{}\n".format(self.numberRequests)
+        return content.encode("ascii")
 
 if __name__ == "__main__":
-    print "running checks..."
-    health_status = status.Status()
-    run_checks(health_status)
-    for check in health_status:
-        print "%s: %s" % (check.name, 'up' if check.status else 'down')
-    
-    # app.debug = True
-    # app.run(host='0.0.0.0',port=8080)
+    tmanager = []
+    t1 = checkThread()
+    t1.start()
+
+    endpoints.serverFromString(reactor, "tcp:8080").listen(server.Site(MonServer()))
+    print "starting twisted server"
+    reactor.run()
+    print "joining sleep thread"
+    t1.join()
