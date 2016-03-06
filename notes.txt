@@ -1,0 +1,19 @@
+# Functions #
+Define a fade function for a single LED
+Define fade for column/row
+Maybe a blink function?
+
+# Patterns #
+random interval delay, fade down columns
+Diagonal fill/empty
+Wipe
+Spiral
+Random pixel out
+Rainfall (fall in columns)
+Tracer on a row
+Blinking pixel and spread
+
+# Notes #
+Could show 1 red row for no data, 2 for no connection
+All colour changes should be fade not switch
+This host should just be monitoring
