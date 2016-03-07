@@ -22,20 +22,20 @@ def run_checks(status):
     status.add(dns)
     loki = checks.Check('Loki', checks.check_host_via_ssh("192.168.1.2"))
     status.add(loki)
-    loki_web = checks.Check('Loki Web Server', checks.check_host_port('192.168.1.2', 80))
+    loki_web = checks.Check('Loki Web Server', checks.check_host_port('loki', 80))
     status.add(loki_web)
     
     ap_two = checks.Check('Asgard_Too Wifi', checks.check_host_port("192.168.1.253", 80))
     status.add(ap_two)
     
-    cassini = checks.Check('Cassini', checks.check_host_via_ssh("192.168.1.252"))
+    cassini = checks.Check('Apollo', checks.check_host_via_ssh("apollo"))
     status.add(cassini)
-    techworld = checks.Check('TechWorld Server', checks.check_host_port("192.168.1.252", 64004))
+    techworld = checks.Check('TechWorld Server', checks.check_host_port("apollo", 64004))
     status.add(techworld)
     
-    freya = checks.Check('Freya', checks.check_host_via_ssh("192.168.1.20"))
+    freya = checks.Check('Freya', checks.check_host_via_ssh("freya"))
     status.add(freya)
-    freya_web = checks.Check('Freya Web Server', checks.check_host_port('192.168.1.20', 80))
+    freya_web = checks.Check('Freya Web Server', checks.check_host_port('freya', 80))
     status.add(freya_web)
 
 

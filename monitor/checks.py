@@ -3,11 +3,11 @@ import socket
 import subprocess
 
 class Check:
-        def __init__(self, name, status, priority=0):
+        def __init__(self, name, status, priority=0, child=None):
                 self.name = name
                 self.status = status
                 self.priority = priority
-        
+                self.child = child
 
 def check_host_port(host,port,timeout=1):
     try:

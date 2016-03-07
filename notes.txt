@@ -17,3 +17,6 @@ Blinking pixel and spread
 Could show 1 red row for no data, 2 for no connection
 All colour changes should be fade not switch
 This host should just be monitoring
+
+# TODO #
+add the notion of "parent" checks, so we can collapse things
