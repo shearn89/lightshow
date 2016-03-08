@@ -3,11 +3,23 @@ import socket
 import subprocess
 
 class Check:
-        def __init__(self, name, status, priority=0, child=None):
+        def __init__(self, name, status, priority=0):
                 self.name = name
                 self.status = status
                 self.priority = priority
-                self.child = child
+                self.children = []
+
+        def add_child(self, child):
+            self.children.append(child)
+        
+        def to_dict(self):
+            output = {}
+            output['name'] = self.name
+            output['status'] = self.status
+            if len(self.children) > 0:
+                for child in self.children:
+                    output['children'] = child.to_dict()
+            return output
 
 def check_host_port(host,port,timeout=1):
     try:

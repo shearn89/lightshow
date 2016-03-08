@@ -5,6 +5,9 @@ class Status:
 
         def add(self, check):
                 self.checks.append(check)
+
+        def flush(self):
+                self.checks = []
         
         def __iter__(self):
                 return self
