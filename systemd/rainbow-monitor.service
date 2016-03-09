@@ -4,6 +4,7 @@ Description=Rainbow Monitor Service
 [Service]
 Type=simple
 ExecStart=/usr/bin/rainbow-monitor.sh
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target

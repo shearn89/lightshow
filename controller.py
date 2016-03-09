@@ -64,6 +64,7 @@ def update_webfile():
             content=output_list))
 
 if __name__ == "__main__":
+    unicorn.rotation(90)
     j2_env = Environment(loader=FileSystemLoader(THIS_DIR), trim_blocks=True)
 
     counter = 0
@@ -82,3 +83,4 @@ if __name__ == "__main__":
             break
         counter = (counter+1) % int(interval/tick)
         tracer = (tracer+1) % 8
+    unicorn.off()
