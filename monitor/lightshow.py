@@ -2,9 +2,11 @@ import time
 import unicornhat as unicorn
 
 def set_light(check, x, y):
-    # print "%s: %s, %d/%d" % (check.name, check.status, x, y)
     if check.status:
         unicorn.set_pixel(x, y, 0, 175, 0)
+        # Clear the rest of the row/column
+        for p in range(8)[y:]:
+            unicorn.set_pixel(x, p, 0, 0, 0)
     else:
         unicorn.set_pixel(x, y, 175, 0, 0)
         if len(check.children) > 0:
@@ -49,7 +51,7 @@ def random_out(self):
 def rainfall(self):
     print "this function will fill the screen like the matrix"
 
-def column_single_row(x, on):
+def tracer_row(x, on):
     for y in range(8):
         unicorn.set_pixel(x, y, 0, 0, 0)
     unicorn.set_pixel(x, on, 100, 0, 100)

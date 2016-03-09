@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     while True:
         try:
-            lightshow.column_single_row(0, tracer%8)
+            lightshow.tracer_row(0, tracer%8)
             if counter == 0:
                 t = threading.Thread(target=update_webfile)
                 t.start()
