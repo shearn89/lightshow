@@ -5,7 +5,7 @@ def set_light(check, x, y):
     if check.status:
         unicorn.set_pixel(x, y, 0, 175, 0)
         # Clear the rest of the row/column
-        for p in range(8)[y:]:
+        for p in range(8)[y+1:]:
             unicorn.set_pixel(x, p, 0, 0, 0)
     else:
         unicorn.set_pixel(x, y, 175, 0, 0)

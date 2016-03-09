@@ -13,8 +13,6 @@ STATUS = "/var/www/html/index.html"
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def run_checks(status):
-    # status.flush()
-
     dns_net = checks.Check('Name Based Internet',checks.check_dns_net())
     status.add(dns_net)
     if not dns_net.status:
