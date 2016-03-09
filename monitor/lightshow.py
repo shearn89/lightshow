@@ -4,9 +4,9 @@ import unicornhat as unicorn
 def set_light(check, x, y):
     # print "%s: %s, %d/%d" % (check.name, check.status, x, y)
     if check.status:
-        unicorn.set_pixel(x, y, 0, 200, 0)
+        unicorn.set_pixel(x, y, 0, 175, 0)
     else:
-        unicorn.set_pixel(x, y, 200, 0, 0)
+        unicorn.set_pixel(x, y, 175, 0, 0)
         if len(check.children) > 0:
             for child in check.children:
                 set_light(child, x, y+1)

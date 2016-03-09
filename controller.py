@@ -64,9 +64,6 @@ def update_webfile():
             content=output_list))
 
 if __name__ == "__main__":
-    unicorn.set_pixel(0, 0, 0, 0, 200)
-    unicorn.show()
-
     j2_env = Environment(loader=FileSystemLoader(THIS_DIR), trim_blocks=True)
 
     counter = 0
