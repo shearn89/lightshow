@@ -8,16 +8,3 @@ class Status:
 
         def flush(self):
                 self.checks = []
-        
-        def __iter__(self):
-                return self
-
-        def next(self):
-                try:
-                        result = self.checks[self.index]
-                except IndexError:
-                        raise StopIteration
-                self.index += 1
-                return result
-
-

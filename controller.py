@@ -3,9 +3,11 @@ import time
 import datetime
 import signal
 import sys
+import unicornhat as unicorn
+import threading
 
 from jinja2 import Environment, FileSystemLoader
-from monitor import checks,status
+from monitor import checks,status,lightshow
 
 STATUS = "/var/www/html/index.html"
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,11 +20,9 @@ def run_checks(status):
     if not dns_net.status:
         ip_net = checks.Check('IP Based Internet',checks.check_general_net())
         dns_net.add_child(ip_net)
-        status.add(ip_net)
         if not ip_net.status:
             modem = checks.Check('Gateway',checks.check_host_port("192.168.1.254", 80))
             ip_net.add_child(modem)
-            status.add(modem)
     
     dns = checks.Check('Loki DNS', checks.check_host_port("192.168.1.2", 53))
     status.add(dns)
@@ -30,7 +30,7 @@ def run_checks(status):
     status.add(loki_web)
     if not (dns.status and loki_web.status):
         loki = checks.Check('Loki', checks.check_host_via_ssh("192.168.1.2"))
-        status.add(loki)
+        loki_web.add_child(loki)
     
     ap_two = checks.Check('Asgard_Too Wifi', checks.check_host_port("192.168.1.253", 80))
     status.add(ap_two)
@@ -39,29 +39,49 @@ def run_checks(status):
     status.add(techworld)
     if not techworld.status:
         cassini = checks.Check('Apollo', checks.check_host_port("apollo", 111))
-        status.add(cassini)
+        techworld.add_child(cassini)
     
     freya_web = checks.Check('Freya Web Server', checks.check_host_port('freya', 80))
     status.add(freya_web)
     if not freya_web.status:
         freya = checks.Check('Freya', checks.check_host_via_ssh("freya"))
-        status.add(freya)
+        freya_web.add_child(freya)
 
-if __name__ == "__main__":
+def update_webfile():
     health_status = status.Status()
 
+    run_checks(health_status)
+    output_list = []
+    tstamp = datetime.datetime.now()
+    for check in health_status.checks:
+        # Here I'll need to read the children to control the LED
+        flatcheck = check.flatten()
+        for c in flatcheck:
+            output_list.append(c.to_dict())
+    lightshow.set_lights(health_status)
+    with open(STATUS, 'w') as output:
+        output.write(j2_env.get_template('template.html').render(last_check = tstamp,
+            content=output_list))
+
+if __name__ == "__main__":
+    unicorn.set_pixel(0, 0, 0, 0, 200)
+    unicorn.show()
+
     j2_env = Environment(loader=FileSystemLoader(THIS_DIR), trim_blocks=True)
+
+    counter = 0
+    tracer = 0
+    interval = 30
+    tick = 0.5
+
     while True:
         try:
-            run_checks(health_status)
-            output_list = []
-            tstamp = datetime.datetime.now()
-            for check in health_status:
-                # Here I'll need to read the children to control the LED
-                output_list.append(check.to_dict())
-            with open(STATUS, 'w') as output:
-                output.write(j2_env.get_template('template.html').render(last_check = tstamp,
-                    content=output_list))
-            time.sleep(30)
+            lightshow.column_single_row(0, tracer%8)
+            if counter == 0:
+                t = threading.Thread(target=update_webfile)
+                t.start()
+            time.sleep(tick)
         except KeyboardInterrupt:
             break
+        counter = (counter+1) % int(interval/tick)
+        tracer = (tracer+1) % 8

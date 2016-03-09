@@ -1,3 +1,23 @@
+import time
+import unicornhat as unicorn
+
+def set_light(check, x, y):
+    # print "%s: %s, %d/%d" % (check.name, check.status, x, y)
+    if check.status:
+        unicorn.set_pixel(x, y, 0, 200, 0)
+    else:
+        unicorn.set_pixel(x, y, 200, 0, 0)
+        if len(check.children) > 0:
+            for child in check.children:
+                set_light(child, x, y+1)
+
+def set_lights(status):
+    x = 7
+    for check in status.checks:
+        set_light(check, x, 0)
+        x -= 1
+    unicorn.show()
+
 # This class controls the actual light modes
 def fade(self):
     print "this function fades an LED"
@@ -29,8 +49,11 @@ def random_out(self):
 def rainfall(self):
     print "this function will fill the screen like the matrix"
 
-def tracer(self):
-    print "this function will show a trace/chaser on a row"
+def column_single_row(x, on):
+    for y in range(8):
+        unicorn.set_pixel(x, y, 0, 0, 0)
+    unicorn.set_pixel(x, on, 100, 0, 100)
+    unicorn.show()
 
 def blink_spread(self):
     print "this function will blink the center and then fill in"

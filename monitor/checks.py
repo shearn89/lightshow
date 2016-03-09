@@ -11,14 +11,17 @@ class Check:
 
         def add_child(self, child):
             self.children.append(child)
+
+        def flatten(self):
+            output = [self]
+            for child in self.children:
+                output.append(child)
+            return output
         
         def to_dict(self):
             output = {}
             output['name'] = self.name
             output['status'] = self.status
-            if len(self.children) > 0:
-                for child in self.children:
-                    output['children'] = child.to_dict()
             return output
 
 def check_host_port(host,port,timeout=1):
