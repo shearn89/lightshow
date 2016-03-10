@@ -70,6 +70,8 @@ if __name__ == "__main__":
     interval = 30
     tick = 0.5
 
+    lightshow.wipe_rev()
+    # TODO: add a button and a sleep timer.
     while True:
         try:
             lightshow.tracer_row(0, tracer%8)

@@ -107,6 +107,15 @@ def wipe():
         set_row(x, (0,0,0))
         time.sleep(0.1)
 
+def wipe_rev():
+    for x in reversed(range(8)):
+        set_row(x, (100,0,80))
+        time.sleep(0.1)
+    for x in reversed(range(8)):
+        set_row(x, (0,0,0))
+        time.sleep(0.1)
+
+
 def spiral(self):
     print "this function will show a spiral"
 
@@ -134,5 +143,6 @@ def tracer_row(x, on):
 if __name__ == "__main__":
     unicorn.rotation(180)
     while True:
-        # sleep_row(0)
-        wipe()
+        # blink(0,0)
+        # wipe()
+        sleep_row(0)
