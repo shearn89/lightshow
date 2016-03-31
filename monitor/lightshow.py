@@ -143,6 +143,6 @@ def tracer_row(x, on):
 if __name__ == "__main__":
     unicorn.rotation(180)
     while True:
-        # blink(0,0)
-        # wipe()
+        blink(0,0)
         sleep_row(0)
+        wipe()
