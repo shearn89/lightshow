@@ -37,6 +37,7 @@ def set_lights(status):
         x -= 1
     unicorn.show()
 
+# TODO: add random colours to this.
 def fade_in(x,y):
     colour = 0
     while colour < 150:
