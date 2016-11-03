@@ -1,0 +1,10 @@
+[Unit]
+Description=Simple blinky light
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/blinky.sh
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
