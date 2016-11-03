@@ -30,14 +30,14 @@ def run_checks(status):
         loki = checks.Check('Loki', checks.check_host_via_ssh("192.168.1.2"))
         loki_web.add_child(loki)
     
-    ap_two = checks.Check('Asgard_Too Wifi', checks.check_host_port("192.168.1.253", 80))
-    status.add(ap_two)
+    # ap_two = checks.Check('Asgard_Too Wifi', checks.check_host_port("192.168.1.253", 80))
+    # status.add(ap_two)
     
-    techworld = checks.Check('Apollo TechWorld Server', checks.check_host_port("apollo", 64004))
-    status.add(techworld)
-    if not techworld.status:
-        cassini = checks.Check('Apollo', checks.check_host_port("apollo", 111))
-        techworld.add_child(cassini)
+    # techworld = checks.Check('Apollo TechWorld Server', checks.check_host_port("apollo", 64004))
+    # status.add(techworld)
+    # if not techworld.status:
+    cassini = checks.Check('Apollo', checks.check_host_port("apollo", 111))
+    techworld.add_child(cassini)
     
     freya_web = checks.Check('Freya Web Server', checks.check_host_port('freya', 80))
     status.add(freya_web)
@@ -62,7 +62,7 @@ def update_webfile():
             content=output_list))
 
 if __name__ == "__main__":
-    # unicorn.rotation(90)
+    unicorn.rotation(90)
     j2_env = Environment(loader=FileSystemLoader(THIS_DIR), trim_blocks=True)
 
     counter = 0
